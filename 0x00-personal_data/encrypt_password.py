@@ -1,36 +1,38 @@
 #!/usr/bin/env python3
-"""Some random docstring"""
+"""
+    Encrypt a string
+"""
+import bcrypt
 
 
-def hash_password(password: str) -> bytes:
+def hash_password(password: str = '') -> bytes:
     """
-    ---------------------
-    METHOD: hash_password
-    ---------------------
-    Description:
-        Takes in a string password and returns a
-        hashed version of it
-    Args:
-        @password: password string
-    """
-    from bcrypt import hashpw, gensalt
+        Hashed the password
 
-    password, salt = bytes(password.encode()), gensalt()
-    return hashpw(password, salt)
+        Args:
+            password: string to hashed
+
+        Return:
+            hashed password
+    """
+    hashed = bcrypt.hashpw(password.encode('utf-8'),
+                           bcrypt.gensalt(prefix=b"2b"))
+
+    return hashed
 
 
 def is_valid(hashed_password: bytes, password: str) -> bool:
     """
-    ----------------
-    METHOD: is_valid
-    ----------------
-    Description:
-        Validates whether a given password is
-        actually valid
-    Args:
-        @hashed_password: hashed password
-        @password: original password
-    """
-    from bcrypt import checkpw
+        Look if is valid password
 
-    return checkpw(password.encode('UTF-8'), hashed_password)
+        Args:
+            hashed_password: Password encrypt
+            password: string to hashed
+
+        Return:
+            True If this are equals
+    """
+    valid = bcrypt.checkpw(password.encode('utf-8'),
+                           hashed_password)
+
+    return valid
